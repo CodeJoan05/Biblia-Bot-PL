@@ -18,9 +18,9 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/information` - wyświetla informacje na temat bota
 
-## Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`
+**Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
-## Ustawiony przez użytkownika domyślny przekład Pisma Świętego za pomocą komendy `/setversion` po wyłączeniu bota **nie zostanie** zresetowany do ustawień fabrycznych
+**Ustawiony przez użytkownika domyślny przekład Pisma Świętego za pomocą komendy `/setversion` po wyłączeniu bota **nie zostanie** zresetowany do ustawień fabrycznych**
 
 ## **Strona internetowa:** 
 
