@@ -1,5 +1,33 @@
 # Biblijny bot na Discorda - PL
 
+## Instalacja pakietów:
+
+* Wpisz w terminalu następujące komendy:
+
+``` python
+pip install discord.py
+```
+
+``` python
+pip install asyncio
+```
+
+``` python
+pip install pysqlite3
+```
+
+``` python
+pip install python-dotenv
+```
+
+## Uruchomienie bota:
+
+* Wpisz w terminalu następującą komendę:
+
+``` python
+python main.py
+```
+
 ## O bocie: 
 
 Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łacińskim, greckim i hebrajskim**
