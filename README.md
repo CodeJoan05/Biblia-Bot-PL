@@ -20,6 +20,12 @@ pip install pysqlite3
 pip install python-dotenv
 ```
 
+## Utwórz plik .env z taką strukturą:
+
+``` python
+TOKEN='tu wklej token bota'
+```
+
 ## Uruchomienie bota:
 
 * Wpisz w terminalu następującą komendę:
