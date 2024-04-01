@@ -56,6 +56,17 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 **Ustawiony przez użytkownika domyślny przekład Pisma Świętego za pomocą komendy `/setversion` po wyłączeniu bota **nie zostanie** zresetowany do ustawień fabrycznych**
 
+## Informacje
+
+<p>Pliki z przekładami Biblii pochodzą z:</p>
+
+* https://www.biblesupersearch.com/bible-downloads/
+* https://www.crosswire.org/sword/modules/ModDisp.jsp?modType=Bibles
+
+<p>Część polskich przekładów Biblii zawiera zawartość ze strony:</p>
+
+* https://web.rbiblia.toborek.info/
+
 ## **Strona internetowa:** 
 
 * https://biblia-bot.netlify.app/
