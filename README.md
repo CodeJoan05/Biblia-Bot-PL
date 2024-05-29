@@ -67,10 +67,6 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 * https://web.rbiblia.toborek.info/
 
-<p>Plik z Biblią Gdańską (1632) został utworzony z plików tekstowych, które pochodzą z:</p>
-
-* https://github.com/piotrskurzynski/biblia/
-
 ## **Strona internetowa:** 
 
 * https://biblia-bot.netlify.app/
