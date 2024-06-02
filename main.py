@@ -135,8 +135,6 @@ async def change_status():
         await asyncio.sleep(5)
         await client.change_presence(activity=discord.Game(name='/help'))
         await asyncio.sleep(5)
-        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f"{len(client.guilds)} serwerach"))
-        await asyncio.sleep(5)
 
 @client.event
 async def on_ready():
@@ -180,7 +178,7 @@ async def help(interaction: discord.Interaction):
 async def information(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Informacje",
-        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **1** w języku angielskim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.",
+        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **1** w języku angielskim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.\n\nAutorem bota jest: **Code Joan**\n\nJeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną: **codejoan@op.pl**",
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
@@ -326,6 +324,15 @@ async def on_message(message):
 
     # Przetwarzanie wiadomości z domyślnym przekładem Biblii użytkownika
     translation = user_data[1] if user_data else None
+
+    # Komenda !servers
+    
+    if message.content.startswith('!servers'):
+        embed = discord.Embed(
+            title="Liczba serwerów",
+            description=f"Bot jest na **{len(client.guilds)}** serwerach",
+            color=12370112)
+        await message.channel.send(embed=embed)
 
     # Sprawdza czy wiadomość zawiera odwołanie do fragmentu Biblii
     
