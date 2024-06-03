@@ -72,7 +72,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS user_settings
 # Akceptowane nazwy ksiąg
 
 def Find_Bible_References(text):
-    with open('Books/books.json', 'r', encoding='utf-8') as file:
+    with open('Booknames/books.json', 'r', encoding='utf-8') as file:
         books = json.load(file)
 
     """ Te linijki tworzą wzorzec dla wyrażenia regularnego, który będzie używany do wyszukiwania odniesień 
@@ -101,7 +101,7 @@ def Find_Bible_References(text):
 
 def Get_Passage(translation, book, chapter, start_verse, end_verse):
 
-    with open('Books/english_polish.json', 'r', encoding='utf-8') as file:
+    with open('Booknames/english_polish.json', 'r', encoding='utf-8') as file:
         english_to_polish_books = json.load(file)
 
     if (start_verse == 0 or end_verse == 0) and start_verse > end_verse:
@@ -187,7 +187,7 @@ async def information(interaction: discord.Interaction):
 @client.tree.command(name="setversion", description="Ustawienie domyślnego przekładu Pisma Świętego")
 async def setversion(interaction: discord.Interaction, translation: str):
 
-    with open('bible_translations.txt', 'r') as file:
+    with open('Translations/bible_translations.txt', 'r') as file:
         bible_translations = [line.strip() for line in file]
 
     if translation in bible_translations:
@@ -197,7 +197,7 @@ async def setversion(interaction: discord.Interaction, translation: str):
         c.execute("REPLACE INTO user_settings (user_id, default_translation) VALUES (?, ?)", (interaction.user.id, translation))
         conn.commit()
         
-        with open('translations.json', 'r', encoding='utf-8') as f:
+        with open('Translations/translations.json', 'r', encoding='utf-8') as f:
             translations = json.load(f)
 
         full_name = translations[translation]
@@ -242,10 +242,10 @@ async def search(interaction: discord.Interaction, text: str):
 
     translation = user_data[1]
 
-    with open('translations.json', 'r', encoding='utf-8') as file:
+    with open('Translations/translations.json', 'r', encoding='utf-8') as file:
         translations = json.load(file)
 
-    with open('Books/english_polish.json', 'r', encoding='utf-8') as file:
+    with open('Booknames/english_polish.json', 'r', encoding='utf-8') as file:
         book_translations = json.load(file)
 
     embeds = []
@@ -350,7 +350,7 @@ async def on_message(message):
         words = message.content.split()
         last_word = words[-1]
 
-        with open('bible_translations.txt', 'r') as file:
+        with open('Translations/bible_translations.txt', 'r') as file:
             bible_translations = [line.strip() for line in file]
 
         if last_word in bible_translations:
@@ -367,7 +367,7 @@ async def process_message_with_translation(message, translation):
 
     # Wysyłanie wiadomości na podany(e) fragment(y) Biblii
 
-    with open('translations.json', 'r', encoding='utf-8') as f:
+    with open('Translations/translations.json', 'r', encoding='utf-8') as f:
         translations = json.load(f)
 
     BibleJson = [] # Tworzy pustą listę o nazwie BibleJson
