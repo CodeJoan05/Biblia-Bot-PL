@@ -168,7 +168,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Pomoc",
-        description="Oto polecenia, których możesz użyć: \n\n`/setversion [przekład]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [słowo(a)]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii zawierających określone słowo(a).\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - pokazuje dostępne przekłady Pisma Świętego\n\n`/information` - wyświetla informacje na temat bota",
+        description="Oto polecenia, których możesz użyć: \n\n`/setversion [przekład]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [słowo(a)]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii zawierających określone słowo(a).\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - pokazuje dostępne przekłady Pisma Świętego\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**",
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
@@ -295,6 +295,20 @@ async def search(interaction: discord.Interaction, text: str):
         embed.add_field(name="", value=f'**{translations[translation]}**')
         embeds.append(embed)
 
+    view = PaginatorView(embeds)
+    await interaction.response.send_message(embed=view.initial, view=view)
+
+# Komenda /updates
+
+@client.tree.command(name="updates", description="Aktualizacje bota")
+async def versions(interaction: discord.Interaction):
+    description = [
+        f'**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
+        f'**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`\n- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę italic\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`',
+        f'**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
+        f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano wczytywanie plików z przekładami Biblii\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
+    ]
+    embeds = [discord.Embed(title="Aktualizacje", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
     await interaction.response.send_message(embed=view.initial, view=view)
 
