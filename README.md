@@ -52,6 +52,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/information` - wyświetla informacje na temat bota
 
+`/updates` - wyświetla informacje o aktualizacjach bota
+
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
 ## Informacje
