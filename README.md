@@ -36,6 +36,7 @@ Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**
 * Send Messages
 * Send Messages in Threads
 * Use Slash Commands
+* Read Message History
 
 ``` python
 self.add_item(discord.ui.Button(label="Dodaj bota", url="twój_link_z_zaproszeniem"))
