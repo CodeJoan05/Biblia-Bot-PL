@@ -30,7 +30,7 @@ TOKEN='tu wklej token bota'
 Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**
 1. Wejdź w aplikację bota
 2. Kliknij w zakładkę **OAuth2**
-3. W **SCOPES** kliknij **bot** i **applications.commands**
+3. W **SCOPES** kliknij `bot` i `applications.commands`
 4. W **BOT PERMISSIONS** nadaj następujące uprawnienia:
 * Read Messages/View Channels
 * Send Messages
