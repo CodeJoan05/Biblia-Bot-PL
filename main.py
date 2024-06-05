@@ -357,15 +357,6 @@ async def on_message(message):
     # Przetwarzanie wiadomości z domyślnym przekładem Biblii użytkownika
     translation = user_data[1] if user_data else None
 
-    # Komenda !servers
-    
-    if message.content.startswith('!servers'):
-        embed = discord.Embed(
-            title="Liczba serwerów",
-            description=f"Bot jest na **{len(client.guilds)}** serwerach",
-            color=12370112)
-        await message.channel.send(embed=embed)
-
     # Sprawdza czy wiadomość zawiera odwołanie do fragmentu Biblii
     
     BibleVerses = Find_Bible_References(message.content)
