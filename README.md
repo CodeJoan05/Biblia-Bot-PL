@@ -38,7 +38,7 @@ Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**
 * Use Slash Commands
 
 ``` python
-self.add_item(discord.ui.Button(label="Dodaj bota", url="link_z_zaproszeniem"))
+self.add_item(discord.ui.Button(label="Dodaj bota", url="twój_link_z_zaproszeniem"))
 ```
 
 ## Uruchomienie bota:
