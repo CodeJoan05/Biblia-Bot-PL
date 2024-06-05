@@ -54,6 +54,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/updates` - wyświetla informacje o aktualizacjach bota
 
+`/invite` - umożliwia dodanie bota na swój serwer
+
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
 ## Informacje
@@ -70,3 +72,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 ## **Strona internetowa:** 
 
 * https://biblia-bot.netlify.app/
+
+## **Kontakt:**
+
+Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną: **codejoan@op.pl**
