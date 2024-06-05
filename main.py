@@ -59,6 +59,8 @@ class PaginatorView(discord.ui.View):
         embed.set_footer(text=self.get_page_number())
         return embed
 
+# Interaktywny przycisk do komendy /invite
+
 class InviteView(discord.ui.View):
     def __init__(self):
         super().__init__()
