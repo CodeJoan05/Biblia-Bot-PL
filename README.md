@@ -25,6 +25,21 @@ pip install python-dotenv
 ``` python
 TOKEN='tu wklej token bota'
 ```
+## Wklej swój link z zaproszeniem:
+
+<p>Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**</p>
+<p>1. Wejdź w aplikację bota</p>
+<p>2. Kliknij w zakładkę **OAuth2**</p>
+<p>3. W **SCOPES** kliknij **bot** i **applications.commands**</p>
+<p>4. W **BOT PERMISSIONS** nadaj następujące uprawnienia:</p>
+- Read Messages/View Channels
+- Send Messages
+- Send Messages in Threads
+- Use Slash Commands
+
+``` python
+self.add_item(discord.ui.Button(label="Dodaj bota", url="link_z_zaproszeniem"))
+```
 
 ## Uruchomienie bota:
 
