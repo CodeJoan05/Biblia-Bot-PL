@@ -66,7 +66,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/versions` - pokazuje dostępne przekłady Pisma Świętego
 
-`/information` - wyświetla informacje na temat bota
+`/information` - wyświetla informacje o bocie
 
 `/updates` - wyświetla informacje o aktualizacjach bota
 
