@@ -72,6 +72,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/invite` - umożliwia dodanie bota na swój serwer
 
+`/contact` - zawiera kontakt do autora bota
+
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
 ## Informacje
