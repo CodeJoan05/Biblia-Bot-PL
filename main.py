@@ -325,12 +325,8 @@ async def updates(interaction: discord.Interaction):
 
 @client.tree.command(name="invite", description="Dodaj bota na swój serwer")
 async def invite(interaction: discord.Interaction):
-    embed = discord.Embed(
-        title="Dodaj bota na swój serwer",
-        description='Aby dodać bota na swój serwer, kliknij w przycisk poniżej:',
-        color=12370112)
     view = InviteView()
-    await interaction.response.send_message(embed=embed, view=view)
+    await interaction.response.send_message(view=view)
 
 # Komenda /contact
 
