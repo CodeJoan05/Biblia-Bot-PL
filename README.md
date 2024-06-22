@@ -58,9 +58,9 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/help` - instrukcja obsługi bota
 
-`/setversion [przekład]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy wpisać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`
+`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy wpisać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`
 
-`/search [słowo(a)]` - służy do wyszukiwania fragmentów Biblii zawierających określone słowo(a)
+`/search [text]` - służy do wyszukiwania fragmentów Biblii zawierających określone słowo(a)
 
 `[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu.
 
