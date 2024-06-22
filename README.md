@@ -64,7 +64,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu.
 
-`/versions` - pokazuje dostępne przekłady Pisma Świętego
+`/versions` - wyświetla dostępne przekłady Pisma Świętego
 
 `/information` - wyświetla informacje o bocie
 
@@ -73,6 +73,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 `/invite` - umożliwia dodanie bota na swój serwer
 
 `/contact` - zawiera kontakt do autora bota
+
+`/booklist [translation]` - wyświetla spis ksiąg podanego przekładu Pisma Świętego. Aby wyświetlić spis ksiąg musisz podać skrót przekładu Pisma Świętego. Wszystkie skróty są dostępne w `/versions`
 
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
