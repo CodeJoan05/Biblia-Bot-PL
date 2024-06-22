@@ -42,6 +42,10 @@ Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**
 self.add_item(discord.ui.Button(label="Dodaj bota", url="twój_link_z_zaproszeniem"))
 ```
 
+## Baza danych
+
+W folderze `data` zostanie utworzona baza danych w pliku `user_settings.db` gdy pierwszy użytkownik ustawi domyślny przekład Pisma Świętego
+
 ## Uruchomienie bota:
 
 * Wpisz w terminalu następującą komendę:
