@@ -79,7 +79,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS user_settings
 # Akceptowane nazwy ksiąg
 
 def Find_Bible_References(text):
-    with open('Booknames/books.json', 'r', encoding='utf-8') as file:
+    with open('resources/booknames/books.json', 'r', encoding='utf-8') as file:
         books = json.load(file)
 
     """ Te linijki tworzą wzorzec dla wyrażenia regularnego, który będzie używany do wyszukiwania odniesień 
@@ -108,13 +108,13 @@ def Find_Bible_References(text):
 
 def Get_Passage(translation, book, chapter, start_verse, end_verse):
 
-    with open('Booknames/english_polish.json', 'r', encoding='utf-8') as file:
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
         english_to_polish_books = json.load(file)
 
     if (start_verse == 0 or end_verse == 0) and start_verse > end_verse:
         return None
 
-    with open(f'Bibles/{translation}.json', 'r') as file:
+    with open(f'resources/bibles/{translation}.json', 'r') as file:
         bible = json.load(file)
 
     verses = list(filter(lambda x: x['book_name'] == book and x['chapter'] ==
@@ -174,8 +174,8 @@ default_translations = {}
 @client.tree.command(name="help", description="Pomoc")
 async def help(interaction: discord.Interaction):
     description = [
-        f'Oto polecenia, których możesz użyć:\n\n`/setversion [przekład]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [słowo]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - pokazuje dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
+        f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/booklist [translation]` - wyświetla spis ksiąg podanego przekładu Pisma Świętego. Aby wyświetlić spis ksiąg musisz podać skrót przekładu Pisma Świętego. Wszystkie skróty są dostępne w `/versions`\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -196,7 +196,7 @@ async def information(interaction: discord.Interaction):
 @client.tree.command(name="setversion", description="Ustawienie domyślnego przekładu Pisma Świętego")
 async def setversion(interaction: discord.Interaction, translation: str):
 
-    with open('Translations/bible_translations.txt', 'r') as file:
+    with open('resources/translations/bible_translations.txt', 'r') as file:
         bible_translations = [line.strip() for line in file]
 
     if translation in bible_translations:
@@ -206,20 +206,20 @@ async def setversion(interaction: discord.Interaction, translation: str):
         c.execute("REPLACE INTO user_settings (user_id, default_translation) VALUES (?, ?)", (interaction.user.id, translation))
         conn.commit()
         
-        with open('Translations/translations.json', 'r', encoding='utf-8') as f:
+        with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
             translations = json.load(f)
 
         full_name = translations[translation]
 
         embed = discord.Embed(
-            title="Ustawienie domyślnego przekładu Biblii",
-            description=f'Twój domyślny przekład Biblii został ustawiony na: `{full_name}`',
+            title="Ustawienie domyślnego przekładu Pisma Świętego",
+            description=f'Twój domyślny przekład Pisma Świętego został ustawiony na: `{full_name}`',
             color=12370112)
         await interaction.response.send_message(embed=embed)
     else:
         embed = discord.Embed(
-            title="Error",
-            description='Podano błędny przekład Biblii',
+            title="Błąd",
+            description='Podano błędny przekład Pisma Świętego',
             color=16711680)
         await interaction.response.send_message(embed=embed)
 
@@ -243,24 +243,24 @@ async def search(interaction: discord.Interaction, text: str):
 
     if not user_data:
         embed = discord.Embed(
-            title="Ustaw domyślny przekład Biblii",
+            title="Ustaw domyślny przekład Pisma Świętego",
             description='Aby korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=12370112)
         await interaction.response.send_message(embed=embed)
         return
 
     translation = user_data[1]
-
-    with open('Translations/translations.json', 'r', encoding='utf-8') as file:
+    
+    with open('resources/translations/translations.json', 'r', encoding='utf-8') as file:
         translations = json.load(file)
 
-    with open('Booknames/english_polish.json', 'r', encoding='utf-8') as file:
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
         book_translations = json.load(file)
 
-    embeds = []
-
-    with open(f'Bibles/{translation}.json', 'r', encoding='utf-8') as file:
+    with open(f'resources/bibles/{translation}.json', 'r', encoding='utf-8') as file:
         bible = json.load(file)
+
+    embeds = []
 
     try:
         words = text.split()
@@ -282,6 +282,7 @@ async def search(interaction: discord.Interaction, text: str):
         return
 
     message = ''
+
     for verse in verses:
         if len(message) + len(verse) < 800:
             message += f"{verse}\n"
@@ -312,10 +313,10 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Czerwiec 2024**\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
+        f'**Czerwiec 2024**\n- Dodano komendę `/booklist`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
         f'**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`\n- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`',
         f'**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
-        f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano wczytywanie plików z przekładami Biblii\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
+        f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
     ]
     embeds = [discord.Embed(title="Aktualizacje", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -337,6 +338,41 @@ async def contact(interaction: discord.Integration):
         description="Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną:\n\nDiscord: **code_joan**\nE-mail: **codejoan@op.pl**",
         color=12370112)
     await interaction.response.send_message(embed=embed)
+
+# Komenda /booklist
+
+@client.tree.command(name="booklist", description="Wyświetla spis ksiąg podanego przekładu Pisma Świętego")
+async def booklist(interaction: discord.Interaction, translation: str):
+    try:
+        with open(f'resources/booklist/{translation}/ST/books.txt', 'r', encoding='utf-8') as file:
+            old_testament_books = file.read().splitlines()
+
+        with open(f'resources/booklist/{translation}/NT/books.txt', 'r', encoding='utf-8') as file:
+            new_testament_books = file.read().splitlines()
+
+        with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
+            translations = json.load(f)
+
+        full_name = translations.get(translation, "Nieznany przekład")
+
+        embed = discord.Embed(
+            title="Spis ksiąg",
+            color=12370112)
+
+        embed.add_field(name="Stary Testament", value=', '.join(old_testament_books), inline=False)
+        embed.add_field(name="Nowy Testament", value=', '.join(new_testament_books), inline=False)
+
+        embed.set_footer(text=f'{full_name}')
+
+        await interaction.response.send_message(embed=embed)
+
+    except FileNotFoundError:
+        error_embed = discord.Embed(
+            title="Błąd",
+            description="Nieprawidłowy skrót przekładu. Sprawdź dostępne przekłady w `/versions`",
+            color=16711680)
+
+        await interaction.response.send_message(embed=error_embed)
 
 @client.event
 async def on_message(message):
@@ -370,7 +406,7 @@ async def on_message(message):
     BibleVerses = Find_Bible_References(message.content)
     if BibleVerses and not user_data:
         embed = discord.Embed(
-            title="Ustaw domyślny przekład Biblii",
+            title="Ustaw domyślny przekład Pisma Świętego",
             description='Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=12370112)
         await message.channel.send(embed=embed)
@@ -381,7 +417,7 @@ async def on_message(message):
         words = message.content.split()
         last_word = words[-1]
 
-        with open('Translations/bible_translations.txt', 'r') as file:
+        with open('resources/translations/bible_translations.txt', 'r') as file:
             bible_translations = [line.strip() for line in file]
 
         if last_word in bible_translations:
@@ -398,7 +434,7 @@ async def process_message_with_translation(message, translation):
 
     # Wysyłanie wiadomości na podany(e) fragment(y) Biblii
 
-    with open('Translations/translations.json', 'r', encoding='utf-8') as f:
+    with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
         translations = json.load(f)
 
     BibleJson = []
