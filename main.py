@@ -66,9 +66,9 @@ class InviteView(discord.ui.View):
         super().__init__()
         self.add_item(discord.ui.Button(label="Dodaj bota", url="twój_link_z_zaproszeniem"))
 
-# Inicjalizacja bazy danych SQLite
+# Utworzenie bazy danych SQLite
 
-conn = sqlite3.connect('user_settings.db')
+conn = sqlite3.connect('data/user_settings.db')
 c = conn.cursor()
 
 # Tworzenie tabeli przechowującej ustawienia użytkowników
