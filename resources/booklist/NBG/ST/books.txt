@@ -1,0 +1,39 @@
+1 Księga Mojżeszowa (Rodzaju)
+2 Księga Mojżeszowa (Wyjścia)
+3 Księga Mojżeszowa (Kapłańska)
+4 Księga Mojżeszowa (Liczb)
+5 Księga Mojżeszowa (Powtórzonego Prawa)
+Księga Jozuego
+Księga Sędziów
+Księga Rut
+1 Księga Samuela
+2 Księga Samuela
+1 Księga Królewska
+2 Księga Królewska
+1 Księga Kronik
+2 Księga Kronik
+Księga Ezdrasza
+Księga Nehemiasza
+Księga Estery
+Księga Hioba
+Księga Psalmów
+Księga Przysłów (Przypowieści Salomona)
+Księga Kaznodziei Salomona (Koheleta)
+Pieśń nad Pieśniami
+Księga Izajasza
+Księga Jeremiasza
+Księga Lamentacji (Lamentacje Jeremiasza)
+Księga Ezechiela
+Księga Daniela
+Księga Ozeasza
+Księga Joela
+Księga Amosa
+Księga Abdiasza
+Księga Jonasza
+Księga Micheasza
+Księga Nahuma
+Księga Habakuka
+Księga Sofoniasza
+Księga Aggeusza
+Księga Zachariasza
+Księga Malachiasza
