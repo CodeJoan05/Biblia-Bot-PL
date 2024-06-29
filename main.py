@@ -217,11 +217,11 @@ async def setversion(interaction: discord.Interaction, translation: str):
             color=12370112)
         await interaction.response.send_message(embed=embed)
     else:
-        embed = discord.Embed(
+        error_embed = discord.Embed(
             title="Błąd",
             description='Podano błędny przekład Pisma Świętego',
             color=16711680)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=error_embed)
 
 # Komenda /versions
 
@@ -274,11 +274,11 @@ async def search(interaction: discord.Interaction, text: str):
             raise ValueError(f'Nie znaleziono żadnego wersetu zawierającego słowo(a) "**{text}**" w przekładzie `{translations[translation]}`')
         
     except ValueError as err:
-        embed = discord.Embed(
+        error_embed = discord.Embed(
             title="Błąd wyszukiwania",
             description=str(err),
             color=16711680)
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=error_embed)
         return
 
     message = ''
@@ -313,9 +313,9 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Czerwiec 2024**\n- Dodano komendę `/booklist`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
-        f'**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`\n- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`',
-        f'**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
+        f'**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/booklist`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
+        f'**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`\n\n**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`',
+        f'- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
         f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
     ]
     embeds = [discord.Embed(title="Aktualizacje", description=desc, color=12370112) for desc in description]
@@ -465,8 +465,8 @@ async def process_message_with_translation(message, translation):
             embed.set_footer(text=translations[translation])
             await message.channel.send(embed=embed)
         else:
-            embed = discord.Embed(
+            error_embed = discord.Embed(
                 title="Błąd wyszukiwania", description="Podany(e) werset(y) nie istnieje(ą) lub przekład Biblii nie zawiera Starego lub Nowego Testamentu", color=16711680)
-            await message.channel.send(embed=embed)
+            await message.channel.send(embed=error_embed)
 
 client.run(os.environ['TOKEN'])
