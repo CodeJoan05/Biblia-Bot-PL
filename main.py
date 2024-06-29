@@ -175,7 +175,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     description = [
         f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/booklist [translation]` - wyświetla spis ksiąg podanego przekładu Pisma Świętego. Aby wyświetlić spis ksiąg musisz podać skrót przekładu Pisma Świętego. Wszystkie skróty są dostępne w `/versions`\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -220,7 +220,7 @@ async def setversion(interaction: discord.Interaction, translation: str):
         error_embed = discord.Embed(
             title="Błąd",
             description='Podano błędny przekład Pisma Świętego',
-            color=16711680)
+            color=0xff1d15)
         await interaction.response.send_message(embed=error_embed)
 
 # Komenda /versions
@@ -277,14 +277,14 @@ async def search(interaction: discord.Interaction, text: str):
         error_embed = discord.Embed(
             title="Błąd wyszukiwania",
             description=str(err),
-            color=16711680)
+            color=0xff1d15)
         await interaction.response.send_message(embed=error_embed)
         return
 
     message = ''
 
     for verse in verses:
-        if len(message) + len(verse) < 800:
+        if len(message) + len(verse) < 700:
             message += f"{verse}\n"
         else:
             embed = discord.Embed(
@@ -313,7 +313,7 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/booklist`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
+        f'**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
         f'**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`\n\n**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`',
         f'- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
         f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
@@ -339,41 +339,6 @@ async def contact(interaction: discord.Integration):
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
-# Komenda /booklist
-
-@client.tree.command(name="booklist", description="Wyświetla spis ksiąg podanego przekładu Pisma Świętego")
-async def booklist(interaction: discord.Interaction, translation: str):
-    try:
-        with open(f'resources/booklist/{translation}/ST/books.txt', 'r', encoding='utf-8') as file:
-            old_testament_books = file.read().splitlines()
-
-        with open(f'resources/booklist/{translation}/NT/books.txt', 'r', encoding='utf-8') as file:
-            new_testament_books = file.read().splitlines()
-
-        with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
-            translations = json.load(f)
-
-        full_name = translations.get(translation, "Nieznany przekład")
-
-        embed = discord.Embed(
-            title="Spis ksiąg",
-            color=12370112)
-
-        embed.add_field(name="Stary Testament", value=', '.join(old_testament_books), inline=False)
-        embed.add_field(name="Nowy Testament", value=', '.join(new_testament_books), inline=False)
-
-        embed.set_footer(text=f'{full_name}')
-
-        await interaction.response.send_message(embed=embed)
-
-    except FileNotFoundError:
-        error_embed = discord.Embed(
-            title="Błąd",
-            description="Nieprawidłowy skrót przekładu. Sprawdź dostępne przekłady w `/versions`",
-            color=16711680)
-
-        await interaction.response.send_message(embed=error_embed)
-
 @client.event
 async def on_message(message):
 
@@ -390,10 +355,6 @@ async def on_message(message):
     # Przypisuje identyfikator autora wiadomości do zmiennej user_id
 
     user_id = message.author.id 
-
-    """ Pierwsza linijka wykonuje zapytanie SQL do bazy danych, szukając wszystkich ustawień dla użytkownika o 
-    danym user_id. Druga linijka pobiera pierwszy rekord z wyników zapytania i przypisuje go do user_data. 
-    Jeśli nie ma żadnych wyników, user_data będzie None """
 
     c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
     user_data = c.fetchone()
@@ -466,7 +427,7 @@ async def process_message_with_translation(message, translation):
             await message.channel.send(embed=embed)
         else:
             error_embed = discord.Embed(
-                title="Błąd wyszukiwania", description="Podany(e) werset(y) nie istnieje(ą) lub przekład Biblii nie zawiera Starego lub Nowego Testamentu", color=16711680)
+                title="Błąd wyszukiwania", description="Podany(e) werset(y) nie istnieje(ą) lub przekład Biblii nie zawiera Starego lub Nowego Testamentu", color=0xff1d15)
             await message.channel.send(embed=error_embed)
 
 client.run(os.environ['TOKEN'])
