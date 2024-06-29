@@ -78,8 +78,6 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/contact` - zawiera kontakt do autora bota
 
-`/booklist [translation]` - wyświetla spis ksiąg podanego przekładu Pisma Świętego. Aby wyświetlić spis ksiąg musisz podać skrót przekładu Pisma Świętego. Wszystkie skróty są dostępne w `/versions`
-
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
 ## Informacje
