@@ -248,7 +248,7 @@ async def search(interaction: discord.Interaction, text: str):
             title="Ustaw domyślny przekład Pisma Świętego",
             description='Aby korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=12370112)
-        await interaction.response.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
         return
 
     translation = user_data[1]
@@ -280,7 +280,7 @@ async def search(interaction: discord.Interaction, text: str):
             title="Błąd wyszukiwania",
             description=str(err),
             color=0xff1d15)
-        await interaction.response.send_message(embed=error_embed)
+        await interaction.followup.send(embed=error_embed)
         return
 
     message = ''
