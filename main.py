@@ -237,6 +237,8 @@ async def versions(interaction: discord.Interaction):
 @client.tree.command(name="search", description="Wyszukiwanie fragmentów w Biblii")
 async def search(interaction: discord.Interaction, text: str):
 
+    await interaction.response.defer()
+
     user_id = interaction.user.id
     c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
     user_data = c.fetchone()
@@ -306,7 +308,7 @@ async def search(interaction: discord.Interaction, text: str):
         embeds.append(embed)
 
     view = PaginatorView(embeds)
-    await interaction.response.send_message(embed=view.initial, view=view)
+    await interaction.followup.send(embed=view.initial, view=view)
 
 # Komenda /updates
 
