@@ -79,7 +79,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/contact` - zawiera kontakt do autora bota
 
-`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)
+`/random [hour]` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)
 
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
