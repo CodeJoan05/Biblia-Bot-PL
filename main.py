@@ -1,7 +1,10 @@
-import discord, json, re, asyncio, sqlite3, os
+import discord, json, re, sqlite3, os, datetime, asyncio, pytz
 from discord.ext import commands
+from discord import app_commands
 from typing import List
 from collections import deque
+from random import choice, randint
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -175,7 +178,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     description = [
         f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random [hour]` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -315,7 +318,7 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
+        f'**Sierpień 2024**\n- Dodano do komendy `/random` opcję ustawienia godziny wysłania wiadomości\n\n**Lipiec 2024**\n- Dodano komendę `/random`\n\n**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
         f'**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`\n\n**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`',
         f'- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
         f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
@@ -344,7 +347,8 @@ async def contact(interaction: discord.Integration):
 # Komenda /random
 
 @client.tree.command(name="random", description="Wyświetla losowy(e) werset(y) z Biblii")
-async def random(interaction: discord.Interaction):
+@app_commands.describe(hour="Godzina wysłania wiadomości (w formacie HH:MM)")
+async def random(interaction: discord.Interaction, hour: str = None):
 
     await interaction.response.defer()
 
@@ -357,7 +361,7 @@ async def random(interaction: discord.Interaction):
             title="Ustaw domyślny przekład Pisma Świętego",
             description='Aby korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=12370112)
-        await interaction.followup.send(embed=embed)
+        await interaction.followup.send(embed=embed, ephemeral=True)
         return
 
     translation = user_data[1]
@@ -419,7 +423,36 @@ async def random(interaction: discord.Interaction):
     )
     embed.set_footer(text=translations[translation])
 
-    await interaction.followup.send(embed=embed)
+    if hour:
+        try:
+            now = datetime.now(pytz.timezone('Europe/Warsaw'))
+            send_time = datetime.strptime(hour, "%H:%M").replace(year=now.year, month=now.month, day=now.day)
+            send_time = pytz.timezone('Europe/Warsaw').localize(send_time)
+
+            if send_time < now:
+                send_time += timedelta(days=1)
+
+            delay = (send_time - now).total_seconds()
+
+            confirmation_embed = discord.Embed(
+                description=f"Wiadomość zostanie wysłana o godzinie **{send_time.strftime('%H:%M')}**",
+                color=12370112
+            )
+            confirmation_message = await interaction.followup.send(embed=confirmation_embed, ephemeral=True)
+
+            await asyncio.sleep(delay)
+            await interaction.channel.send(embed=embed)
+            await confirmation_message.delete()
+
+        except ValueError:
+            error_embed = discord.Embed(
+                title="Błąd",
+                description="Podano nieprawidłowy format godziny. Prawidłowy format to **HH:MM**",
+                color=0xff1d15
+            )
+            await interaction.followup.send(embed=error_embed)
+    else:
+        await interaction.followup.send(embed=embed, ephemeral=True)
 
 @client.event
 async def on_message(message):
