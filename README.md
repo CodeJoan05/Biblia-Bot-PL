@@ -100,4 +100,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 ## **Kontakt:**
 
-Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną: **codejoan@op.pl**
+Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną:
+
+* Discord: **code_joan**
+* Instagram: **chrzescijanstwo_2021**
