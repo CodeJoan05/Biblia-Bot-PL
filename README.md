@@ -79,7 +79,9 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/contact` - zawiera kontakt do autora bota
 
-`/random [hour]` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)
+`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)
+
+`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**
 
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
