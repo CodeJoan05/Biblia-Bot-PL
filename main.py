@@ -178,7 +178,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     description = [
         f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random [hour]` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n**Jeśli nowa komenda nie jest widoczna na twoim serwerze, spróbuj ponownie dodać bota na swój serwer**'
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -230,11 +230,15 @@ async def setversion(interaction: discord.Interaction, translation: str):
 
 @client.tree.command(name="versions", description="Dostępne przekłady Pisma Świętego")
 async def versions(interaction: discord.Interaction):
-    description = f'**Polskie:**\n\n`BB` - Biblia Brzeska (1563)\n`BN` - Biblia Nieświeska (1574)\n`BJW` - Biblia Jakuba Wujka (1599/1874)\n`BG` - Biblia Gdańska (1881)\n`BS` - Biblia Szwedzka (1948)\n`BP` - Biblia Poznańska (1975)\n`BW` - Biblia Warszawska (1975)\n`SZ` - Słowo Życia (1989)\n`BT` - Biblia Tysiąclecia: wydanie V (1999)\n`SNPD` - Słowo Nowego Przymierza: przekład dosłowny (2004)\n`GOR` - Biblia Góralska (2005)\n`NBG` - Nowa Biblia Gdańska (2012)\n`PAU` - Biblia Paulistów (2016)\n`UBG` - Uwspółcześniona Biblia Gdańska (2017)\n`BE` - Biblia Ekumeniczna (2018)\n`SNP` - Słowo Nowego Przymierza: przekład literacki (2018)\n`TNP` - Przekład Toruński Nowego Przymierza (2020)\n`TRO` - Textus Receptus Oblubienicy (2023)\n\n**Angielskie:**\n\n`KJV` - King James Version (1611/1769)\n\n**Łacińskie:**\n\n`VG` - Wulgata\n\n**Greckie:**\n\n`TR` - Textus Receptus (1550/1884)\n`BYZ` - Tekst Bizantyjski (2013)\n\n**Hebrajskie:**\n\n`WLC` - Westminster Leningrad Codex'
-    embeds = [discord.Embed(title="Dostępne przekłady Biblii", description=f'Oto dostępne przekłady Biblii: \n\n' + description[i:i+543], color=12370112) for i in range(0, len(description), 543)]
+    description = [
+        f'Oto dostępne przekłady Biblii: \n\n**Polskie:**\n\n`BB` - Biblia Brzeska (1563)\n`BN` - Biblia Nieświeska (1574)\n`BJW` - Biblia Jakuba Wujka (1599/1874)\n`BG` - Biblia Gdańska (1881)\n`BS` - Biblia Szwedzka (1948)\n`BP` - Biblia Poznańska (1975)\n`BW` - Biblia Warszawska (1975)\n`SZ` - Słowo Życia (1989)\n`BT` - Biblia Tysiąclecia: wydanie V (1999)\n`SNPD` - Słowo Nowego Przymierza: przekład dosłowny (2004)',
+        f'Oto dostępne przekłady Biblii: \n\n`GOR` - Biblia Góralska (2005)\n`NBG` - Nowa Biblia Gdańska (2012)\n`PAU` - Biblia Paulistów (2016)\n`UBG` - Uwspółcześniona Biblia Gdańska (2017)\n`BE` - Biblia Ekumeniczna (2018)\n`SNP` - Słowo Nowego Przymierza: przekład literacki (2018)\n`TNP` - Przekład Toruński Nowego Przymierza (2020)\n`TRO` - Textus Receptus Oblubienicy (2023)\n\n**Angielskie:**\n\n`KJV` - King James Version (1611/1769)',
+        f'Oto dostępne przekłady Biblii: \n\n**Łacińskie:**\n\n`VG` - Wulgata\n\n**Greckie:**\n\n`TR` - Textus Receptus (1550/1884)\n`BYZ` - Tekst Bizantyjski (2013)\n\n**Hebrajskie:**\n\n`WLC` - Westminster Leningrad Codex'
+    ]
+    embeds = [discord.Embed(title="Dostępne przekłady Biblii", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
     await interaction.response.send_message(embed=view.initial, view=view)
-
+    
 # Komenda /search
 
 @client.tree.command(name="search", description="Wyszukiwanie fragmentów w Biblii")
@@ -318,10 +322,12 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Sierpień 2024**\n- Dodano do komendy `/random` opcję ustawienia godziny wysłania wiadomości\n\n**Lipiec 2024**\n- Dodano komendę `/random`\n\n**Czerwiec 2024**\n- Naprawiono błąd w komendzie `/search`\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`\n- Naprawiono błąd w komendzie `/setversion`\n- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`',
-        f'**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`\n\n**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`',
-        f'- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*\n- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)\n- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`',
-        f'**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`\n\n**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
+        f'**Sierpień 2024**\n- Usunięto z komendy `/random` możliwość ustawienia godziny wysłania wiadomości\n- Dodano komendę `/dailyverse` z możliwością ustawienia godziny wysłania wiadomości\n- Dodano do komendy `/random` opcję ustawienia godziny wysłania wiadomości\n\n**Lipiec 2024**\n- Dodano komendę `/random`\n\n**Czerwiec 2024**\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`',
+        f'- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
+        f'**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`\n- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*',
+        f'- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)',
+        f'- Zmieniono angielskie nazwy ksiąg na polskie\n- Zmieniono typ komend na slash commands\n- Dodano przekłady Biblii: `KJV`, `BW`\n\n**Maj 2023**\n- Dodano komendę `!versions`\n- Dodano wiadomość informującą o błędzie gdy użytkownik poda złe numery wersetów\n- Zmieniono wygląd wiadomości na embed\n- Dodano przekłady Biblii: `TR`, `WLC`',
+        f'**Kwiecień 2023**\n- Dodano zmieniający się status\n- Dodano komendę, w której podaje się nazwę księgi, numer rozdziału, numer(y) wersetu(ów) i skrót przekładu Biblii\n- Utworzono 2 komendy z prefiksem: `!help` i `!information`\n- Dodano przekłady Biblii: `BG`, `UBG`, `NBG`\n\n**Marzec 2023**\n- Utworzenie aplikacji bota\n- Uruchomienie aplikacji bota na Discordzie'
     ]
     embeds = [discord.Embed(title="Aktualizacje", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -347,8 +353,7 @@ async def contact(interaction: discord.Integration):
 # Komenda /random
 
 @client.tree.command(name="random", description="Wyświetla losowy(e) werset(y) z Biblii")
-@app_commands.describe(hour="Godzina wysłania wiadomości (w formacie HH:MM)")
-async def random(interaction: discord.Interaction, hour: str = None):
+async def random(interaction: discord.Interaction):
 
     await interaction.response.defer()
 
@@ -361,7 +366,7 @@ async def random(interaction: discord.Interaction, hour: str = None):
             title="Ustaw domyślny przekład Pisma Świętego",
             description='Aby korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=12370112)
-        await interaction.followup.send(embed=embed, ephemeral=True)
+        await interaction.followup.send(embed=embed)
         return
 
     translation = user_data[1]
@@ -423,8 +428,84 @@ async def random(interaction: discord.Interaction, hour: str = None):
     )
     embed.set_footer(text=translations[translation])
 
-    if hour:
-        try:
+    await interaction.followup.send(embed=embed)
+
+# Komenda /dailyverse
+
+@client.tree.command(name="dailyverse", description="Wyświetla werset(y) dnia z Biblii")
+@app_commands.describe(verses="Ustaw fragment(y) z Biblii", hour="Godzina wysłania wiadomości (w formacie HH:MM)")
+async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = None):
+
+    await interaction.response.defer()
+
+    user_id = interaction.user.id
+    c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
+    user_data = c.fetchone()
+
+    if not user_data:
+        embed = discord.Embed(
+            title="Ustaw domyślny przekład Pisma Świętego",
+            description='Aby korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`',
+            color=12370112)
+        await interaction.followup.send(embed=embed, ephemeral=True)
+        return
+    
+    translation = user_data[1]
+
+    with open(f'resources/bibles/{translation}.json', 'r') as file:
+        bible = json.load(file)
+
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
+        english_to_polish_books = json.load(file)
+
+    with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
+        translations = json.load(f)
+
+    try:
+        # Parsowanie opcji verses
+        parsed_verses = []
+        verse_title = ""
+        
+        for verse in verses.split(','):
+            book_name, rest = verse.strip().split(' ', 1)
+            chapter, verse_range = rest.split(':')
+            chapter = int(chapter)
+            
+            if '-' in verse_range:
+                verse_start, verse_end = map(int, verse_range.split('-'))
+                verse_title = f"{book_name} {chapter}:{verse_start}-{verse_end}"
+            else:
+                verse_start = verse_end = int(verse_range)
+                verse_title = f"{book_name} {chapter}:{verse_start}"
+
+            # Tłumaczenie nazwy księgi
+            book_name_english = {v: k for k, v in english_to_polish_books.items()}.get(book_name, book_name)
+
+            # Wyszukiwanie wersetu(ów) w pliku JSON
+            for entry in bible:
+                if entry["book_name"] == book_name_english and entry["chapter"] == chapter and entry["verse"] >= verse_start and entry["verse"] <= verse_end:
+                    parsed_verses.append(entry)
+
+        if not parsed_verses:
+            error_embed = discord.Embed(
+                title="Błąd",
+                description="Nie znaleziono podanego fragmentu",
+                color=0xff1d15
+            )
+            await interaction.followup.send(embed=error_embed, ephemeral=True)
+            return
+        
+        chapter = parsed_verses[0]["chapter"]
+        verses_text = " ".join([f"**({entry['verse']})** {entry['text']}" for entry in parsed_verses])
+        
+        embed = discord.Embed(
+            title=f"{verse_title}",
+            description=verses_text,
+            color=12370112
+        )
+        embed.set_footer(text=translations[translation])
+
+        if hour:
             now = datetime.now(pytz.timezone('Europe/Warsaw'))
             send_time = datetime.strptime(hour, "%H:%M").replace(year=now.year, month=now.month, day=now.day)
             send_time = pytz.timezone('Europe/Warsaw').localize(send_time)
@@ -443,16 +524,17 @@ async def random(interaction: discord.Interaction, hour: str = None):
             await asyncio.sleep(delay)
             await interaction.channel.send(embed=embed)
             await confirmation_message.delete()
+        else:
+            # Jeśli godzina nie została podana, wiadomość jest wysyłana od razu
+            await interaction.followup.send(embed=embed)
 
-        except ValueError:
-            error_embed = discord.Embed(
-                title="Błąd",
-                description="Podano nieprawidłowy format godziny. Prawidłowy format to **HH:MM**",
-                color=0xff1d15
-            )
-            await interaction.followup.send(embed=error_embed)
-    else:
-        await interaction.followup.send(embed=embed, ephemeral=True)
+    except ValueError:
+        error_embed = discord.Embed(
+            title="Błąd",
+            description="Podano nieprawidłowy format godziny. Prawidłowy format to **HH:MM**",
+            color=0xff1d15
+        )
+        await interaction.followup.send(embed=error_embed, ephemeral=True)
 
 @client.event
 async def on_message(message):
