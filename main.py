@@ -458,19 +458,51 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
     with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
         english_to_polish_books = json.load(file)
 
+    with open('resources/booknames/books.json', 'r', encoding='utf-8') as file:
+        books_aliases = json.load(file)
+
     with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
         translations = json.load(f)
 
+    def normalize_book_name(book_name):
+        book_name = book_name.strip().lower()
+        
+        # Sprawdza, czy nazwa księgi pasuje do pełnej lub skróconej nazwy
+        for book, aliases in books_aliases.items():
+            if book_name in [alias.lower() for alias in aliases]:
+                return book
+        return book_name
+
+    def get_polish_book_name(english_name):
+        return english_to_polish_books.get(english_name, english_name)
+
+    def extract_book_and_remainder(text):
+        text = text.strip()
+
+        for i in range(len(text)):
+            if text[i].isdigit() and (i > 0 and text[i-1] == ' '):
+                # Akceptowanie nazwy księgi typu "1 Jana 1:1"
+                book_name = text[:i].strip()
+                remainder = text[i:].strip()
+                return book_name, remainder
+
+        if ' ' in text:
+            book_name, remainder = text.split(' ', 1)
+            return book_name, remainder
+
+        return text, ""
+
     try:
-        # Parsowanie opcji verses
         parsed_verses = []
         verse_title = ""
-        
+
         for verse in verses.split(','):
-            book_name, rest = verse.strip().split(' ', 1)
-            chapter, verse_range = rest.split(':')
+            verse = verse.strip()
+
+            book_name, remainder = extract_book_and_remainder(verse)
+            chapter, verse_range = remainder.split(':')
             chapter = int(chapter)
-            
+
             if '-' in verse_range:
                 verse_start, verse_end = map(int, verse_range.split('-'))
                 verse_title = f"{book_name} {chapter}:{verse_start}-{verse_end}"
@@ -478,12 +510,15 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
                 verse_start = verse_end = int(verse_range)
                 verse_title = f"{book_name} {chapter}:{verse_start}"
 
-            # Tłumaczenie nazwy księgi
-            book_name_english = {v: k for k, v in english_to_polish_books.items()}.get(book_name, book_name)
+            book_name_normalized = normalize_book_name(book_name)
+            book_name_polish = get_polish_book_name(book_name_normalized)
 
-            # Wyszukiwanie wersetu(ów) w pliku JSON
+            verse_title = f"{book_name_polish} {chapter}:{verse_start}"
+            if verse_start != verse_end:
+                verse_title += f"-{verse_end}"
+
             for entry in bible:
-                if entry["book_name"] == book_name_english and entry["chapter"] == chapter and entry["verse"] >= verse_start and entry["verse"] <= verse_end:
+                if entry["book_name"] == book_name_normalized and entry["chapter"] == chapter and entry["verse"] >= verse_start and entry["verse"] <= verse_end:
                     parsed_verses.append(entry)
 
         if not parsed_verses:
