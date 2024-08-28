@@ -346,7 +346,7 @@ async def invite(interaction: discord.Interaction):
 async def contact(interaction: discord.Integration):
     embed = discord.Embed(
         title="Kontakt",
-        description="Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną:\n\nDiscord: **code_joan**\nInstagram: **chrzescijanstwo_2021**",
+        description="Jeśli chcesz zgłosić błąd lub dać propozycję zmian w bocie skontaktuj się ze mną:\n\nDiscord: **code_joan**\nInstagram: **god.is.graceful**",
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
