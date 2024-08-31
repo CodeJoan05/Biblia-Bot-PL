@@ -178,7 +178,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     description = [
         f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**'
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**\n\n`/removeuserdata` - usuwa dane użytkownika z bazy danych'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -322,7 +322,7 @@ async def search(interaction: discord.Interaction, text: str):
 @client.tree.command(name="updates", description="Aktualizacje bota")
 async def updates(interaction: discord.Interaction):
     description = [
-        f'**Sierpień 2024**\n- Usunięto z komendy `/random` możliwość ustawienia godziny wysłania wiadomości\n- Dodano komendę `/dailyverse` z możliwością ustawienia godziny wysłania wiadomości\n- Dodano do komendy `/random` opcję ustawienia godziny wysłania wiadomości\n\n**Lipiec 2024**\n- Dodano komendę `/random`\n\n**Czerwiec 2024**\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`',
+        f'**Sierpień 2024**\n- Dodano komendę `/removeuserdata`\n- Dodano komendę `/dailyverse` z możliwością ustawienia godziny wysłania wiadomości\n\n**Lipiec 2024**\n- Dodano komendę `/random`\n\n**Czerwiec 2024**\n- Dodano komendę `/contact`\n- Dodano komendę `/invite`',
         f'- Dodano komendę `/updates`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/updates`\n\n**Marzec 2024**\n- Dodano przyciski strzałek w wiadomości embed do komendy `/versions`\n- Dodano przekłady Biblii: `BE`, `PAU`, `TRO`\n\n**Luty 2024**\n- Dodano komendę `/search`\n- Dodano przyciski strzałek w wiadomości embed do komendy `/search`',
         f'**Styczeń 2024**\n- Utworzono bazę danych, w której przechowuje się ustawiony przez użytkownika przekład Pisma Świętego\n\n**Grudzień 2023**\n- Dodano przekłady Biblii: `VG`, `SNP`, `SNPD`\n\n**Wrzesień 2023**\n- Dodano komendę `/setversion`\n- Dodano stopkę w wiadomości embed, która wyświetla pełną nazwę przekładu Biblii\n- Dodano czcionkę *italic*',
         f'- Dodano przekłady Biblii: `BS`, `BT`, `GOR`\n\n**Sierpień 2023**\n- Dodano przekłady Biblii: `TNP`, `SZ`, `BP`\n\n**Lipiec 2023**\n- Dodano przekłady Biblii: `BYZ`, `BJW`, `BN`, `BB`\n\n**Czerwiec 2023**\n- Dodano możliwość używania różnych nazw ksiąg (po polsku, angielsku i w formie skrótów)',
@@ -570,6 +570,35 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
             color=0xff1d15
         )
         await interaction.followup.send(embed=error_embed, ephemeral=True)
+
+# Komenda /removeuserdata
+
+@client.tree.command(name="removeuserdata", description="Usuwa dane użytkownika z bazy danych")
+async def removeuserdata(interaction: discord.Interaction):
+    user_id = interaction.user.id
+    user_name = interaction.user.mention
+    
+    # Pobranie danych użytkownika przed usunięciem
+    c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
+    user_data = c.fetchone()
+    
+    if user_data:
+        # Usunięcie danych użytkownika
+        c.execute("DELETE FROM user_settings WHERE user_id = ?", (user_id,))
+        conn.commit()  # Zatwierdzenie zmian w bazie danych
+
+        embed = discord.Embed(
+            title="Usuwanie danych użytkownika",
+            description=f"Usunięto dane użytkownika {user_name} z bazy danych. Aby móc w pełni korzystać z bota musisz ponownie ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`",
+            color=12370112
+        )
+    else:
+        embed = discord.Embed(
+            title="Błąd",
+            description="Nie znaleziono danych użytkownika w bazie danych.",
+            color=0xff1d15
+        )
+    await interaction.response.send_message(embed=embed)
 
 @client.event
 async def on_message(message):
