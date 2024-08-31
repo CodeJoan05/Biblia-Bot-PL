@@ -83,6 +83,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**
 
+`/removeuserdata` - usuwa dane użytkownika z bazy danych
+
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
 ## Informacje
