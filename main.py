@@ -190,7 +190,7 @@ async def help(interaction: discord.Interaction):
 async def information(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Informacje",
-        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **1** w języku angielskim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.\n\n**Strona internetowa:** https://biblia-bot.netlify.app/",
+        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **1** w języku angielskim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.\n\n**Strona internetowa:** https://biblia-bot.netlify.app/\n\n[Terms of Service](https://biblia-bot.netlify.app/terms-of-service) | [Privacy Policy](https://biblia-bot.netlify.app/privacy-policy)",
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
