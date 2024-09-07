@@ -36,7 +36,6 @@ Linka z zaproszeniem należy utworzyć w **Discord Developer Portal**
 * Send Messages
 * Send Messages in Threads
 * Use Slash Commands
-* Read Message History
 * Manage Messages
 
 ``` python
