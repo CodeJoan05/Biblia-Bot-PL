@@ -72,8 +72,6 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, łaciń
 
 `/information` - wyświetla informacje o bocie
 
-`/updates` - wyświetla informacje o aktualizacjach bota
-
 `/invite` - umożliwia dodanie bota na swój serwer
 
 `/contact` - zawiera kontakt do autora bota
