@@ -139,20 +139,13 @@ def Filter_Verses(verse, start_verse, end_verse):
 
 # Informacje o logowaniu i aktywności na discordzie
 
-async def change_status():
-    while True:
-        await client.change_presence(activity=discord.Activity(name='Biblię', type=discord.ActivityType.watching))
-        await asyncio.sleep(5)
-        await client.change_presence(activity=discord.Game(name='/help'))
-        await asyncio.sleep(5)
-
 @client.event
 async def on_ready():
     print(f'Zalogowano jako {client.user}!')
-    client.loop.create_task(change_status())
+    await client.change_presence(activity=discord.Activity(name='Biblię', type=discord.ActivityType.watching))
     try:
         synced = await client.tree.sync()
-        print(f"Zsynchronizowano {len(synced)}")
+        print(f"Zsynchronizowano {len(synced)} komend")
     except Exception as e:
         print(e)
 
@@ -178,7 +171,7 @@ default_translations = {}
 async def help(interaction: discord.Interaction):
     description = [
         f'Oto polecenia, których możesz użyć:\n\n`/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy podać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`\n\n`/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii\n\n`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu\n\n`/versions` - wyświetla dostępne przekłady Pisma Świętego',
-        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/updates` - wyświetla informacje o aktualizacjach bota\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**\n\n`/removeuserdata` - usuwa dane użytkownika z bazy danych'
+        f'Oto polecenia, których możesz użyć:\n\n`/information` - wyświetla informacje o bocie\n\n`/invite` - umożliwia dodanie bota na swój serwer\n\n`/contact` - zawiera kontakt do autora bota\n\n`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)\n\n`/dailyverse [verses] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**\n\n`/removeuserdata` - usuwa dane użytkownika z bazy danych'
     ]
     embeds = [discord.Embed(title="Pomoc", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
@@ -278,7 +271,8 @@ async def search(interaction: discord.Interaction, text: str):
             if all(word in verse['text'] for word in words):
                 for word in words:
                     verse['text'] = verse['text'].replace(word, f'**{word}**')
-                verses.append(f"**{book_translations[verse['book_name']]} {verse['chapter']}:{verse['verse']}** \n{verse['text']} \n")
+                italics_font = format_verse_text(verse['text'])
+                verses.append(f"**{book_translations[verse['book_name']]} {verse['chapter']}:{verse['verse']}** \n{italics_font} \n")
         if not verses:
             raise ValueError(f'Nie znaleziono żadnego wersetu zawierającego słowo(a) "**{text}**" w przekładzie `{translations[translation]}`')
         
@@ -293,7 +287,7 @@ async def search(interaction: discord.Interaction, text: str):
     message = ''
 
     for verse in verses:
-        if len(message) + len(verse) < 700:
+        if len(message) + len(verse) < 650:
             message += f"{verse}\n"
         else:
             embed = discord.Embed(
