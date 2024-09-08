@@ -165,6 +165,22 @@ def format_verse_text(text):
 
 default_translations = {}
 
+# Autouzupełnianie opcji w komendzie /setversion
+
+async def translation_autocomplete(
+    interaction: discord.Interaction,
+    current: str,
+) -> list[app_commands.Choice[str]]:
+    with open('resources/translations/bible_translations.txt', 'r') as file:
+        bible_translations = [line.strip() for line in file]
+    
+    # Filtrowanie wersji Biblii na podstawie bieżących danych wejściowych
+    return [
+        app_commands.Choice(name=translation, value=translation)
+        for translation in bible_translations
+        if current.lower() in translation.lower()
+    ][:25]  # Do 25 podpowiedzi
+
 # Komenda /help
 
 @client.tree.command(name="help", description="Pomoc")
@@ -190,6 +206,7 @@ async def information(interaction: discord.Interaction):
 # Komenda na ustawienie domyślnego przekładu Biblii - /setversion
 
 @client.tree.command(name="setversion", description="Ustawienie domyślnego przekładu Pisma Świętego")
+@app_commands.autocomplete(translation=translation_autocomplete)
 async def setversion(interaction: discord.Interaction, translation: str):
 
     with open('resources/translations/bible_translations.txt', 'r') as file:
@@ -215,7 +232,7 @@ async def setversion(interaction: discord.Interaction, translation: str):
     else:
         error_embed = discord.Embed(
             title="Błąd",
-            description='Podano błędny przekład Pisma Świętego',
+            description='Podano błędny przekład Pisma Świętego. Wszystkie skróty przekładów są dostępne w `/versions`',
             color=0xff1d15)
         await interaction.response.send_message(embed=error_embed)
 
