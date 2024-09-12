@@ -21,5 +21,8 @@
     "VG": "Wulgata",
     "TR": "Textus Receptus (1550/1884)", 
     "WLC": "Westminster Leningrad Codex", 
-    "BYZ": "Tekst Bizantyjski (2013)"
+    "BYZ": "Tekst Bizantyjski (2013)",
+    "ASV": "American Standard Version (1901)",
+    "SCH": "Schlachter Bibel (1951)",
+    "LUTH": "Luther Bibel (1545)"
 }
