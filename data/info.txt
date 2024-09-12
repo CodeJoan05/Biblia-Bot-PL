@@ -1,1 +1,1 @@
-W tym folderze zostanie utworzona baza danych w pliku user_settings.db
+W tym folderze zostanie utworzona baza danych w pliku user_settings.db z dwoma kolumnami (user_id, default_translation)
