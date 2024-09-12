@@ -199,7 +199,7 @@ async def help(interaction: discord.Interaction):
 async def information(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Informacje",
-        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **1** w języku angielskim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.\n\n**Strona internetowa:** https://biblia-bot.netlify.app/\n\n[Terms of Service](https://biblia-bot.netlify.app/terms-of-service) | [Privacy Policy](https://biblia-bot.netlify.app/privacy-policy)",
+        description="**Biblia** to bot, który umożliwia czytanie Biblii w wielu językach, co pozwala na dogłębne badanie różnic między tekstami oryginalnymi a ich tłumaczeniami.\n\nBot zawiera **18** przekładów Pisma Świętego w języku polskim, **2** w języku angielskim, **2** w języku niemieckim, **1** w języku łacińskim, **2** w języku greckim oraz **1** w języku hebrajskim.\n\n**Strona internetowa:** https://biblia-bot.netlify.app/\n\n[Terms of Service](https://biblia-bot.netlify.app/terms-of-service) | [Privacy Policy](https://biblia-bot.netlify.app/privacy-policy)",
         color=12370112)
     await interaction.response.send_message(embed=embed)
 
@@ -243,7 +243,8 @@ async def versions(interaction: discord.Interaction):
     description = [
         f'Oto dostępne przekłady Biblii: \n\n**Polskie:**\n\n`BB` - Biblia Brzeska (1563)\n`BN` - Biblia Nieświeska (1574)\n`BJW` - Biblia Jakuba Wujka (1599/1874)\n`BG` - Biblia Gdańska (1881)\n`BS` - Biblia Szwedzka (1948)\n`BP` - Biblia Poznańska (1975)\n`BW` - Biblia Warszawska (1975)\n`SZ` - Słowo Życia (1989)\n`BT` - Biblia Tysiąclecia: wydanie V (1999)\n`SNPD` - Słowo Nowego Przymierza: przekład dosłowny (2004)',
         f'Oto dostępne przekłady Biblii: \n\n`GOR` - Biblia Góralska (2005)\n`NBG` - Nowa Biblia Gdańska (2012)\n`PAU` - Biblia Paulistów (2016)\n`UBG` - Uwspółcześniona Biblia Gdańska (2017)\n`BE` - Biblia Ekumeniczna (2018)\n`SNP` - Słowo Nowego Przymierza: przekład literacki (2018)\n`TNP` - Przekład Toruński Nowego Przymierza (2020)\n`TRO` - Textus Receptus Oblubienicy (2023)\n\n**Angielskie:**\n\n`KJV` - King James Version (1611/1769)',
-        f'Oto dostępne przekłady Biblii: \n\n**Łacińskie:**\n\n`VG` - Wulgata\n\n**Greckie:**\n\n`TR` - Textus Receptus (1550/1884)\n`BYZ` - Tekst Bizantyjski (2013)\n\n**Hebrajskie:**\n\n`WLC` - Westminster Leningrad Codex'
+        f'Oto dostępne przekłady Biblii: \n\n`ASV` - American Standard Version (1901)\n\n**Niemieckie:**\n\n`LUTH` - Luther Bibel (1545)\n`SCH` - Schlachter Bibel (1951)\n\n**Łacińskie:**\n\n`VG` - Wulgata',
+        f'Oto dostępne przekłady Biblii: \n\n**Greckie:**\n\n`TR` - Textus Receptus (1550/1884)\n`BYZ` - Tekst Bizantyjski (2013)\n\n**Hebrajskie:**\n\n`WLC` - Westminster Leningrad Codex'
     ]
     embeds = [discord.Embed(title="Dostępne przekłady Biblii", description=desc, color=12370112) for desc in description]
     view = PaginatorView(embeds)
