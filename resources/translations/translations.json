@@ -24,5 +24,8 @@
     "BYZ": "Tekst Bizantyjski (2013)",
     "ASV": "American Standard Version (1901)",
     "SCH": "Schlachter Bibel (1951)",
-    "LUTH": "Luther Bibel (1545)"
+    "LUTH": "Luther Bibel (1545)",
+    "UKJV": "Updated King James Version (2000)",
+    "ALEP": "Aleppo Codex",
+    "LXX": "Septuaginta - Morphologically Tagged Rahlfs"
 }
