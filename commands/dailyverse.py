@@ -1,6 +1,7 @@
-import discord, datetime, asyncio, pytz, json, sqlite3
+import discord, datetime, asyncio, pytz, json, sqlite3, os
 from discord.ext import commands
 from discord import app_commands
+from typing import List
 from datetime import datetime, timedelta
 
 intents = discord.Intents.default()
@@ -17,16 +18,137 @@ c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS user_settings
              (user_id INTEGER PRIMARY KEY, default_translation TEXT)''')
 
-@client.tree.command(name="dailyverse", description="Wyświetla werset(y) dnia z Biblii")
-@app_commands.describe(verses="Ustaw fragment(y) z Biblii", hour="Godzina wysłania wiadomości (w formacie HH:MM)")
-async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = None):
+# Funkcja do tworzenia indeksu rozdziałów i wersetów na podstawie pliku danego przekładu Biblii
 
-    await interaction.response.defer()
+def create_bible_index(translation: str):
+    bible_index = {}
 
+    bible_path = f'resources/bibles/{translation}.json'
+    if not os.path.exists(bible_path):
+        return None
+
+    with open(bible_path, 'r', encoding='utf-8') as file:
+        bible_data = json.load(file)
+
+    for verse in bible_data:
+        book_name = verse['book_name']
+        chapter = verse['chapter']
+        verse_number = verse['verse']
+
+        if book_name not in bible_index:
+            bible_index[book_name] = {}
+
+        if chapter not in bible_index[book_name]:
+            bible_index[book_name][chapter] = []
+
+        bible_index[book_name][chapter].append(verse_number)
+
+    return bible_index
+
+# Funkcja autouzupełniania dla nazw ksiąg
+
+async def autocomplete_books(interaction: discord.Interaction, current: str) -> List[discord.app_commands.Choice]:
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
+        english_to_polish_books = json.load(file)
+
+    return [
+        discord.app_commands.Choice(name=pl, value=pl)
+        for pl in english_to_polish_books.values()
+        if current.lower() in pl.lower()
+    ][:15]  # Ograniczenie do 15 wyników
+
+# Funkcja autouzupełniania dla rozdziałów
+
+async def autocomplete_chapter(interaction: discord.Interaction, current: str) -> List[discord.app_commands.Choice]:
+    book = interaction.namespace.book
     user_id = interaction.user.id
+
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
+        english_to_polish_books = json.load(file)
+
     c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
     user_data = c.fetchone()
 
+    if not user_data:
+        return []
+
+    translation = user_data[1]
+
+    bible_index = create_bible_index(translation)
+    if not bible_index:
+        return []
+
+    # Znajduje angielską nazwę księgi
+    english_book_name = None
+    for en, pl in english_to_polish_books.items():
+        if pl == book:
+            english_book_name = en
+            break
+
+    if not english_book_name or english_book_name not in bible_index:
+        return []
+
+    # Pobiera dostępne rozdziały dla księgi
+    chapters = list(bible_index[english_book_name].keys())
+
+    return [
+        discord.app_commands.Choice(name=str(chapter), value=str(chapter))
+        for chapter in chapters if current.isdigit() and current in str(chapter)
+    ][:15]  # Ograniczenie do 15 wyników
+
+# Funkcja autouzupełniania dla wersetów
+
+async def autocomplete_verse(interaction: discord.Interaction, current: str) -> List[discord.app_commands.Choice]:
+    book = interaction.namespace.book
+    chapter = interaction.namespace.chapter
+    user_id = interaction.user.id
+
+    with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
+        english_to_polish_books = json.load(file)
+
+    c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
+    user_data = c.fetchone()
+
+    if not user_data:
+        return []
+
+    translation = user_data[1]
+
+    bible_index = create_bible_index(translation)
+    if not bible_index:
+        return []
+
+    # Znajduje angielską nazwę księgi
+    english_book_name = None
+    for en, pl in english_to_polish_books.items():
+        if pl == book:
+            english_book_name = en
+            break
+
+    if not english_book_name or english_book_name not in bible_index:
+        return []
+
+    # Pobiera dostępne wersety dla danego rozdziału
+    verses = bible_index[english_book_name].get(int(chapter), [])
+
+    return [
+        discord.app_commands.Choice(name=str(verse), value=str(verse))
+        for verse in verses if current.isdigit() and current in str(verse)
+    ][:15]  # Ograniczenie do 15 wyników
+
+# Komenda /dailyverse
+
+@client.tree.command(name="dailyverse", description="Wyświetla werset(y) dnia z Biblii")
+@app_commands.autocomplete(book=autocomplete_books, chapter=autocomplete_chapter, start_verse=autocomplete_verse, end_verse=autocomplete_verse)
+@app_commands.describe(book="Nazwa księgi", chapter="Numer rozdziału", start_verse="Numer wersetu początkowego", end_verse="Numer wersetu końcowego", hour="Godzina wysłania wiadomości (w formacie HH:MM)")
+async def dailyverse(interaction: discord.Interaction, book: str, chapter: int, start_verse: int, end_verse: int, hour: str = None):
+    await interaction.response.defer()
+   
+    user_id = interaction.user.id
+
+    c.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,))
+    user_data = c.fetchone()
+   
     if not user_data:
         embed = discord.Embed(
             title="Ustaw domyślny przekład Pisma Świętego",
@@ -34,7 +156,7 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
             color=12370112)
         await interaction.followup.send(embed=embed, ephemeral=True)
         return
-    
+
     translation = user_data[1]
 
     with open(f'resources/bibles/{translation}.json', 'r') as file:
@@ -43,70 +165,34 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
     with open('resources/booknames/english_polish.json', 'r', encoding='utf-8') as file:
         english_to_polish_books = json.load(file)
 
-    with open('resources/booknames/books.json', 'r', encoding='utf-8') as file:
-        books_aliases = json.load(file)
-
     with open('resources/translations/translations.json', 'r', encoding='utf-8') as f:
         translations = json.load(f)
 
-    def normalize_book_name(book_name):
-        book_name = book_name.strip().lower()
-        
-        # Sprawdza, czy nazwa księgi pasuje do pełnej lub skróconej nazwy
-        for book, aliases in books_aliases.items():
-            if book_name in [alias.lower() for alias in aliases]:
-                return book
-        return book_name
-
-    def get_polish_book_name(english_name):
-        return english_to_polish_books.get(english_name, english_name)
-
-    def extract_book_and_remainder(text):
-        text = text.strip()
-
-        for i in range(len(text)):
-            if text[i].isdigit() and (i > 0 and text[i-1] == ' '):
-                # Akceptowanie nazwy księgi typu "1 Jana 1:1"
-                book_name = text[:i].strip()
-                remainder = text[i:].strip()
-                return book_name, remainder
-
-        if ' ' in text:
-            book_name, remainder = text.split(' ', 1)
-            return book_name, remainder
-
-        return text, ""
-
     try:
-        parsed_verses = []
-        verse_title = ""
+        # Znajduje angielską nazwę księgi na podstawie polskiej nazwy
+        english_book_name = None
+        for en, pl in english_to_polish_books.items():
+            if pl == book:
+                english_book_name = en
+                break
 
-        for verse in verses.split(','):
-            verse = verse.strip()
+        if not english_book_name:
+            error_embed = discord.Embed(
+                title="Błąd",
+                description="Nie znaleziono podanej nazwy księgi",
+                color=0xff1d15
+            )
+            await interaction.followup.send(embed=error_embed, ephemeral=True)
+            return
 
-            book_name, remainder = extract_book_and_remainder(verse)
-            chapter, verse_range = remainder.split(':')
-            chapter = int(chapter)
+        # Znajdowanie odpowiedniego wersetu
+        selected_verses = [
+            verse for verse in bible
+            if verse['book_name'] == english_book_name and verse['chapter'] == chapter
+            and start_verse <= verse['verse'] <= end_verse
+        ]
 
-            if '-' in verse_range:
-                verse_start, verse_end = map(int, verse_range.split('-'))
-                verse_title = f"{book_name} {chapter}:{verse_start}-{verse_end}"
-            else:
-                verse_start = verse_end = int(verse_range)
-                verse_title = f"{book_name} {chapter}:{verse_start}"
-
-            book_name_normalized = normalize_book_name(book_name)
-            book_name_polish = get_polish_book_name(book_name_normalized)
-
-            verse_title = f"{book_name_polish} {chapter}:{verse_start}"
-            if verse_start != verse_end:
-                verse_title += f"-{verse_end}"
-
-            for entry in bible:
-                if entry["book_name"] == book_name_normalized and entry["chapter"] == chapter and entry["verse"] >= verse_start and entry["verse"] <= verse_end:
-                    parsed_verses.append(entry)
-
-        if not parsed_verses:
+        if not selected_verses:
             error_embed = discord.Embed(
                 title="Błąd",
                 description="Nie znaleziono podanego fragmentu",
@@ -114,16 +200,14 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
             )
             await interaction.followup.send(embed=error_embed, ephemeral=True)
             return
-        
-        chapter = parsed_verses[0]["chapter"]
-        verses_text = " ".join([f"**({entry['verse']})** {entry['text']}" for entry in parsed_verses])
-        
-        embed = discord.Embed(
-            title=f"{verse_title}",
-            description=verses_text,
-            color=12370112
+
+        title = f"{book} {chapter}:{start_verse}-{end_verse}"
+        description = " ".join(
+            f"**({verse['verse']})** {verse['text']}" for verse in selected_verses
         )
-        embed.set_footer(text=translations[translation])
+
+        embed = discord.Embed(title=title, description=description, color=12370112)
+        embed.set_footer(text=f'{translations[translation]}')
 
         if hour:
             now = datetime.now(pytz.timezone('Europe/Warsaw'))
@@ -139,7 +223,7 @@ async def dailyverse(interaction: discord.Interaction, verses: str, hour: str = 
                 description=f"Wiadomość zostanie wysłana o godzinie **{send_time.strftime('%H:%M')}**",
                 color=12370112
             )
-            confirmation_message = await interaction.followup.send(embed=confirmation_embed, ephemeral=True)
+            confirmation_message = await interaction.followup.send(embed=confirmation_embed)
 
             await asyncio.sleep(delay)
             await interaction.channel.send(embed=embed)
