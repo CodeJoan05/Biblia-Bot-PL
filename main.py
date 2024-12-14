@@ -2,67 +2,39 @@ import discord, json, re, sqlite3, os
 from discord.ext import commands
 from dotenv import load_dotenv
 
+# Import komend
+
+from commands.help import help
+from commands.information import information
+from commands.versions import versions
+from commands.invite import invite
+from commands.contact import contact
+from commands.setversion import setversion
+from commands.search import search
+from commands.removeuserdata import removeuserdata
+from commands.random import random
+from commands.dailyverse import dailyverse
+from commands.maps import maps
+
 load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
-# Przyciski do komend
+# Rejestracja komend
 
-class PaginatorView(discord.ui.View):
-    def __init__(
-        self, 
-        embeds:List[discord.Embed]
-    ) -> None:
-        super().__init__(timeout=None)
-        self._embeds = embeds
-        self._queue = deque(embeds)
-        self._initial = embeds[0]
-        self._current_page = 1
-        self._len = len(embeds)
-
-        if self._len == 1:
-            self.previous_page.disabled = True
-            self.next_page.disabled = True
-
-    def get_page_number(self) -> str:
-        return f"Strona {self._current_page} z {self._len}"
-
-    @discord.ui.button(style=discord.ButtonStyle.secondary, emoji="⬅️")
-    async def previous_page(self, interaction: discord.Interaction, _):
-        self._queue.rotate(1)
-        embed = self._queue[0]
-        if self._current_page > 1:
-            self._current_page -= 1
-        else:
-            self._current_page = self._len
-        embed.set_footer(text=self.get_page_number())
-        await interaction.response.edit_message(embed=embed)
-
-    @discord.ui.button(style=discord.ButtonStyle.secondary, emoji="➡️")
-    async def next_page(self, interaction: discord.Interaction, _):
-        self._queue.rotate(-1)
-        if self._current_page < self._len:
-            self._current_page += 1
-        else:
-            self._current_page = 1
-        embed = self._queue[0]
-        embed.set_footer(text=self.get_page_number())
-        await interaction.response.edit_message(embed=embed)
-
-    @property
-    def initial(self) -> discord.Embed:
-        embed = self._initial
-        embed.set_footer(text=self.get_page_number())
-        return embed
-
-# Interaktywny przycisk do komendy /invite
-
-class InviteView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        self.add_item(discord.ui.Button(label="Dodaj bota", url="twój_link_z_zaproszeniem"))
+client.tree.add_command(help)
+client.tree.add_command(information)
+client.tree.add_command(versions)
+client.tree.add_command(invite)
+client.tree.add_command(contact)
+client.tree.add_command(setversion)
+client.tree.add_command(search)
+client.tree.add_command(removeuserdata)
+client.tree.add_command(random)
+client.tree.add_command(dailyverse)
+client.tree.add_command(maps)
 
 # Utworzenie bazy danych SQLite
 
