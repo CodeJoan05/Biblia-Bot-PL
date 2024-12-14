@@ -62,11 +62,11 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, niemiec
 
 `/help` - instrukcja obsługi bota
 
+`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu
+
 `/setversion [translation]` - ustawia domyślny przekład Pisma Świętego. Aby ustawić domyślny przekład Pisma Świętego należy wpisać jego skrót. Wszystkie skróty przekładów są dostępne w `/versions`
 
 `/search [text]` - służy do wyszukiwania fragmentów w danym przekładzie Biblii
-
-`[księga] [rozdział]:[werset-(y)] [przekład]` - schemat komendy do uzyskania fragmentów z Biblii. Jeśli użytkownik chce uzyskać fragment z danego przekładu Pisma Świętego należy podać jego skrót. Przykład: `Jana 3:16-17 BG`. Jeśli użytkownik ustawił sobie domyślny przekład Pisma Świętego to nie trzeba podawać jego skrótu.
 
 `/versions` - wyświetla dostępne przekłady Pisma Świętego
 
@@ -81,6 +81,8 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, niemiec
 `/dailyverse [book] [chapter] [start_verse] [end_verse] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**
 
 `/removeuserdata` - usuwa dane użytkownika z bazy danych
+
+`/maps [map]` - wyświetla wybraną mapę z Biblii
 
 **Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
 
