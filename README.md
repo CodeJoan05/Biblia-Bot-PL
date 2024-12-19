@@ -72,13 +72,13 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, niemiec
 
 `/information` - wyświetla informacje o bocie
 
-`/invite` - umożliwia dodanie bota na swój serwer
+`/invite` - wyświetla link z zaproszeniem
 
 `/contact` - zawiera kontakt do autora bota
 
-`/random` - wyświetla losowy(e) werset(y) z Biblii (od 1 do 10 wersetów)
+`/random` - wyświetla losowy werset z Biblii
 
-`/dailyverse [book] [chapter] [start_verse] [end_verse] [hour]` - umożliwia ustawienie wersetu(ów) dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**
+`/dailyverse [book] [chapter] [start_verse] [end_verse] [hour]` - umożliwia ustawienie wersetu dnia z Biblii. Opcjonalnie można ustawić godzinę wysłania wiadomości w formacie **HH:MM**
 
 `/removeuserdata` - usuwa dane użytkownika z bazy danych
 
