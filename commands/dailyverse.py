@@ -138,7 +138,7 @@ async def autocomplete_verse(interaction: discord.Interaction, current: str) -> 
 
 # Komenda /dailyverse
 
-@client.tree.command(name="dailyverse", description="Wyświetla werset(y) dnia z Biblii")
+@client.tree.command(name="dailyverse", description="Wyświetla werset dnia z Biblii")
 @app_commands.autocomplete(book=autocomplete_books, chapter=autocomplete_chapter, start_verse=autocomplete_verse, end_verse=autocomplete_verse)
 @app_commands.describe(book="Nazwa księgi", chapter="Numer rozdziału", start_verse="Numer wersetu początkowego", end_verse="Numer wersetu końcowego", hour="Godzina wysłania wiadomości (w formacie HH:MM)")
 async def dailyverse(interaction: discord.Interaction, book: str, chapter: int, start_verse: int, end_verse: int, hour: str = None):
