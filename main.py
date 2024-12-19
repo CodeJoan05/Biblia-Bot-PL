@@ -220,7 +220,7 @@ async def process_message_with_translation(message, translation):
             await message.channel.send(embed=embed)
         else:
             error_embed = discord.Embed(
-                title="Błąd wyszukiwania", description="Podany(e) werset(y) nie istnieje(ą) lub przekład Biblii nie zawiera Starego lub Nowego Testamentu", color=0xff1d15)
+                title="Błąd wyszukiwania", description="Podany werset nie istnieje lub przekład Biblii nie zawiera Starego lub Nowego Testamentu", color=0xff1d15)
             await message.channel.send(embed=error_embed)
 
 client.run(os.environ['TOKEN'])
