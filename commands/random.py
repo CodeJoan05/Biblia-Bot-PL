@@ -21,7 +21,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS user_settings
 def format_verse_text(text):
     return re.sub(r'\[([^\]]+)\]', r'*\1*', text)
 
-@client.tree.command(name="random", description="Wyświetla losowy(e) werset(y) z Biblii")
+@client.tree.command(name="random", description="Wyświetla losowy werset z Biblii")
 async def random(interaction: discord.Interaction):
 
     await interaction.response.defer()
