@@ -84,7 +84,7 @@ Bot zawiera przekłady Pisma Świętego w **języku polskim, angielskim, niemiec
 
 `/maps [map]` - wyświetla wybraną mapę z Biblii
 
-**Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy `/setversion`**
+**Aby móc korzystać z funkcji wyszukiwania fragmentów Biblii, musisz najpierw ustawić domyślny przekład Pisma Świętego za pomocą komendy** `/setversion`
 
 ## Informacje
 
